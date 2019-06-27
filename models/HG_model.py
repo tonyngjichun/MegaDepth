@@ -4,7 +4,7 @@ import os
 from torch.autograd import Variable
 from .base_model import BaseModel
 import sys
-import pytorch_DIW_scratch
+from MegaDepth import pytorch_DIW_scratch
 
 class HGModel(BaseModel):
     def name(self):
@@ -16,7 +16,7 @@ class HGModel(BaseModel):
         print("===========================================LOADING Hourglass NETWORK====================================================")
         model = pytorch_DIW_scratch.pytorch_DIW_scratch
         model= torch.nn.parallel.DataParallel(model, device_ids = [0,1])
-        model_parameters = self.load_network(model, 'G', 'best_vanila')
+        model_parameters = self.load_network(model, 'G', 'best_generalization')
         model.load_state_dict(model_parameters)
         self.netG = model.cuda()
 
@@ -119,7 +119,7 @@ class HGModel(BaseModel):
 
     def evaluate_RMSE(self, input_images, prediction_d, targets):
         count = 0            
-        total_loss = Variable(torch.cuda.FloatTensor(1))
+        total_loss = torch.Tensor(1).cuda()
         total_loss[0] = 0
         mask_0 = Variable(targets['mask_0'].cuda(), requires_grad = False)
         d_gt_0 = torch.log(Variable(targets['gt_0'].cuda(), requires_grad = False))

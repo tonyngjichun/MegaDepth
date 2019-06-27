@@ -1,11 +1,12 @@
 import argparse
 import os
-from util import util
+from MegaDepth.util import util
 
 class BaseOptions():
     def __init__(self):
         self.parser = argparse.ArgumentParser()
         self.initialized = False
+        self.isTrain = False
 
     def initialize(self):
         # self.parser.add_argument('--dataroot', required=True, help='path to images (should have subfolders trainA, trainB, valA, valB, etc)')

@@ -9,13 +9,16 @@ from models.models import create_model
 from skimage import io
 from skimage.transform import resize
 
+from PIL import Image
+import matplotlib.pyplot as plt
 
-img_path = 'demo.jpg'
+
+img_path = '4080.jpg'
 
 model = create_model(opt)
 
-input_height = 384
-input_width  = 512
+input_height = 1024
+input_width  = 768
 
 
 def test_simple(model):
@@ -37,16 +40,21 @@ def test_simple(model):
 
     # visualize prediction using inverse depth, so that we don't need sky segmentation (if you want to use RGB map for visualization, \
     # you have to run semantic segmentation to mask the sky first since the depth of sky is random from CNN)
-    pred_inv_depth = 1/pred_depth
+    pred_inv_depth = pred_depth
     pred_inv_depth = pred_inv_depth.data.cpu().numpy()
     # you might also use percentile for better visualization
     pred_inv_depth = pred_inv_depth/np.amax(pred_inv_depth)
 
-    io.imsave('demo.png', pred_inv_depth)
+    io.imsave('try.png', pred_inv_depth)
     # print(pred_inv_depth.shape)
-    sys.exit()
+#    sys.exit()
 
 
 
 test_simple(model)
 print("We are done")
+fig = plt.figure
+img = plt.imread('try.png')
+
+plt.imshow(img, cmap='jet')
+plt.show()
